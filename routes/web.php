@@ -44,6 +44,11 @@ Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('k
 Route::get('/kasir/prosespesanan', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
 Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
 
-// Owner
+//owner
 Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
+Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
+Route::get('/owner/produk', [OwnerController::class, 'produk'])->name('owner.produk');
+Route::get('/owner/tambah-produk', [OwnerController::class, 'createProduk'])->name('owner.tambahProduk');
+Route::post('/owner/tambah-produk', [OwnerController::class, 'storeProduk'])->name('owner.storeProduk');
+Route::get('/owner/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
