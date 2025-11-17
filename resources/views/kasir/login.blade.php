@@ -18,12 +18,19 @@
                     class="w-full h-full object-cover rounded-full shadow-lg ring-4 ring-white/70">
             </div>
         </div>
-        <h1 class="text-2xl font-extrabold tracking-wide uppercase mt-2 mb-6 bg-blue-400 text-transparent bg-clip-text drop-shadow-sm">
+        <h1 
+        class="text-2xl font-extrabold tracking-wide uppercase mt-2 mb-6 bg-blue-400 text-transparent bg-clip-text drop-shadow-sm">
             Kasir Mie Pansit Gajah Siantar
         </h1>
+        @if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mb-4 text-left" role="alert">
+        <strong class="font-bold">Login Gagal!</strong>
+        <span class="block sm:inline">{{ $errors->first() }}</span>
+    </div>
+@endif
 
         <!-- form username & passowrd -->
-        <form action="{{ route('kasir.menu') }}" method="POST" class="space-y-4">
+        <form action="{{ route('kasir.login') }}" method="POST" class="space-y-4">
             @csrf
             <input type="text" name="username" placeholder="Username"
                 class="w-full px-4 py-3 rounded-xl bg-white/30 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
@@ -35,6 +42,7 @@
                 class="w-full mt-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 hover:scale-105">
                 LOGIN
             </button>
+            </form>
         </form>
 
         <!-- lupa pass -->

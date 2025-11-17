@@ -5,27 +5,19 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\OwnerController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('customer.home');
 });
 
-Route::get('/kasir/login', function () {
-    return view('kasir.login');
-})->name('kasir.loginForm');
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    });
-});
-
-Route::middleware(['auth', 'role:kasir'])->group(function () {
-    Route::get('/kasir', function () {
-        return view('kasir.dashboard');
-    });
-});
-
-// Customer
+// =========================================================
+// !! RUTE CUSTOMER YANG HILANG, KITA KEMBALIKAN !!
+// =========================================================
 Route::get('/cust/home', [CustomerController::class, 'dashboard'])->name('cust.home');
 Route::get('/customer/data', [CustomerController::class, 'data'])->name('customer.data');
 Route::get('/customer/order', [CustomerController::class, 'order'])->name('customer.order');
@@ -35,16 +27,51 @@ Route::get('/customer/minuman', [CustomerController::class, 'minuman'])->name('c
 Route::get('/customer/checkout', [CustomerController::class, 'checkout'])->name('customer.checkout');
 Route::get('/customer/qris', [CustomerController::class, 'qris'])->name('customer.qris');
 Route::POST('/customer/proses', [CustomerController::class, 'proses'])->name('customer.proses');
+// =========================================================
 
 
-// Kasir
+// Admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', function () {
+        return view('admin.dashboard');
+    });
+});
+
+// --- Rute Kasir ---
+
+// Rute Login (Publik)
+Route::get('/kasir/login', function () {
+    return view('kasir.login');
+})->name('kasir.loginForm');
+
 Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
-Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
-Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
-Route::get('/kasir/prosespesanan', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
-Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
 
-//owner
+// Rute Kasir yang Dilindungi (Harus Login)
+Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/kasir', function () {
+        return redirect()->route('kasir.accpesanan'); 
+    })->name('kasir.dashboard');
+
+    Route::post('/kasir/logout', [KasirController::class, 'logout'])->name('kasir.logout');
+
+    Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
+    Route::post('/kasir/menu/store', [KasirController::class, 'storeMenu'])->name('kasir.menu.store');
+    
+    Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
+    Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
+    
+    // Rute untuk MENAMPILKAN halaman proses
+    Route::get('/kasir/proses/{id_cart}', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
+    
+    // !! INI ROUTE BARU YANG SAYA TAMBAHKAN (UNTUK TOMBOL FORM) !!
+    Route::put('/kasir/selesaikan/{id_cart}', [KasirController::class, 'selesaikanPesanan'])->name('kasir.selesaikan');
+
+    Route::get('/kasir/history/{id_cart}', [KasirController::class, 'detailhistory'])->name('kasir.history.detail');
+});
+
+
+// --- Rute Owner ---
 Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
 Route::get('/owner/product', [OwnerController::class, 'product'])->name('owner.product');
