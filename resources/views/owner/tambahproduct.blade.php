@@ -22,7 +22,7 @@
       </div>
       <h1 class="text-xl font-bold uppercase tracking-wide">Tambah Produk</h1>
     </div>
-    <a href="{{ route('owner.produk') }}" class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
+    <a href="{{ route('owner.product') }}" class="bg-yellow-400 text-blue-900 font-semibold px-4 py-2 rounded-full shadow-md hover:bg-yellow-500 transition">
       ← Kembali
     </a>
   </nav>
@@ -47,8 +47,7 @@
       @endif
 
       <!-- Form -->
-      <form action="{{ route('owner.storeProduk') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+        <form action="{{ url('/owner/product') }}" method="GET" class="space-y-4">
 
         <!-- Nama Produk -->
         <div class="mb-5">

@@ -35,11 +35,11 @@
     <aside class="w-64 bg-blue-400 text-white min-h-screen p-6 shadow-xl">
       <h2 class="text-lg font-bold mb-6 text-white/90 uppercase tracking-wide">Menu Owner</h2>
       <ul class="space-y-4">
-        <li><a href="#" class="block bg-blue-500 py-2 px-3 rounded-full font-semibold text-center shadow hover:bg-blue-600 transition"> Dashboard</a></li>
-        <li><a href="#" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Data Transaksi</a></li>
-        <li><a href="#" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Produk & Harga</a></li>
-        <li><a href="#" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Laporan Harian</a></li>
-        <li><a href="#" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Tambah Produk</a></li>
+        <li><a href="{{ route('owner.dashboard') }}" class="block bg-blue-500 py-2 px-3 rounded-full font-semibold text-center shadow hover:bg-blue-600 transition"> Dashboard</a></li>
+        <li><a href="{{ route('owner.transaksi') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Data Transaksi</a></li>
+        <li><a href="{{ route('owner.product') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Product & Harga</a></li>
+        <li><a href="{{ route('owner.laporan') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Laporan Harian</a></li>
+        <li><a href="{{ route('owner.tambahproduct') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Tambah Produk</a></li>
       </ul>
     </aside>
 

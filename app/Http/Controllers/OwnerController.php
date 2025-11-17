@@ -12,19 +12,18 @@ class OwnerController extends Controller
         return view('owner.dashboard');
     }
 
-    public function produk()
+    public function product()
     {
         $products = DB::table('product')->orderByDesc('Id_Product')->get();
-        return view('owner.produk', compact('products'));
+        return view('owner.product', compact('products'));
     }
 
-   
-    public function createProduk()
+    public function tambahproduct()
     {
-        return view('owner.tambah-produk');
+        return view('owner.tambahproduct');
     }
 
-        public function storeProduk(Request $request)
+    public function upproduct(Request $request)
     {
         
         $request->validate([
@@ -39,8 +38,8 @@ class OwnerController extends Controller
         if ($request->hasFile('Image')) {
             $file = $request->file('Image');
             $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/produk'), $namaFile);
-            $imagePath = 'uploads/produk/' . $namaFile;
+            $file->move(public_path('uploads/product'), $namaFile);
+            $imagePath = 'uploads/product' . $namaFile;
         }
 
         // Simpan data ke tabel product
@@ -52,19 +51,19 @@ class OwnerController extends Controller
         ]);
 
         // Kembali ke halaman produk
-        return redirect()->route('owner.produk')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('owner.product')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     public function transaksi()
     {
     // Ambil data dari tabel transaksi 
-      $transaksi = \DB::table('transaction_log')->orderByDesc('Id_Transaction_Log')->get();
+    $transaksi = \DB::table('transaction_log')->orderByDesc('Id_Transaction_Log')->get();
 
     return view('owner.transaksi', compact('transaksi'));
     }
 
-     public function laporan()
-{
+    public function laporan()
+    {
     // Ambil total penjualan per tanggal dari tabel transaction_log
     $laporan = \DB::table('transaction_log')
         ->selectRaw('DATE(Tanggal_Transaksi) as tanggal, COUNT(*) as jumlah_transaksi, SUM(Total) as total_penjualan')
