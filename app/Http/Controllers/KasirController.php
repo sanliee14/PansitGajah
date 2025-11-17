@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash; 
-use App\Models\User;                 
+use App\Models\User;             
+use Illuminate\Support\Facades\Log; 
 
 class KasirController extends Controller
 {
     public function login(Request $request) 
     {
+        // ... (Fungsi login) ...
         $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
@@ -38,6 +40,7 @@ class KasirController extends Controller
      */
     public function logout(Request $request)
     {
+        // ... (Fungsi logout) ...
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -49,7 +52,6 @@ class KasirController extends Controller
      */
     public function menu()
     {
-        // Mengambil data dari tabel 'product'
         $menus = DB::table('product')->get(); 
         return view('kasir.menu', ['menus' => $menus]);
     }
@@ -59,20 +61,16 @@ class KasirController extends Controller
      */
     public function storeMenu(Request $request)
     {
-        // 1. Validasi input 
         $request->validate([
             'nama_menu' => 'required|string|max:255', 
             'harga' => 'required|numeric|min:0',
         ]);
         
-        // 2. Simpan ke tabel 'product'
         DB::table('product')->insert([
             'Nama_Product' => $request->nama_menu, 
             'Harga' => $request->harga,
-            // 'kategori' Dihapus
         ]);
         
-        // 3. Kembali ke halaman menu dengan pesan sukses
         return redirect()->route('kasir.menu')->with('success', 'Menu berhasil ditambahkan.');
     }
 
@@ -83,7 +81,7 @@ class KasirController extends Controller
     public function accpesanan()
     {
         $pesananMasuk = DB::table('cart')
-                            ->where('Status', 'diproses')
+                            ->whereRaw('LOWER(Status) = ?', ['diproses'])
                             ->orderBy('Id_Cart', 'asc')
                             ->get();
         return view('kasir.accpesanan', ['semuaPesanan' => $pesananMasuk]);
@@ -100,10 +98,10 @@ class KasirController extends Controller
         }
 
         $items = DB::table('detail_cart') 
-                    ->join('product', 'detail_cart.id_product', '=', 'product.Id_Product') 
-                    ->where('detail_cart.id_cart', $id_cart) 
-                    ->select('product.Nama_Product', 'detail_cart.jumlah', 'product.Harga') 
-                    ->get();
+                ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product') 
+                ->where('detail_cart.Id_Cart', $id_cart) 
+                ->select('product.Nama_Product', 'detail_cart.Quantity as jumlah', 'product.Harga') 
+                ->get();
 
         return view('kasir.prosespesanan', [
             'order' => $order, 
@@ -112,12 +110,31 @@ class KasirController extends Controller
     }
 
     /**
+     * Memproses dan mengubah status pesanan menjadi 'selesai'.
+     */
+    public function selesaikanPesanan(Request $request, $id_cart)
+    {
+        $order = DB::table('cart')->where('Id_Cart', $id_cart)->first();
+
+        if (!$order) {
+            return back()->with('error', 'Pesanan tidak ditemukan.');
+        }
+        DB::table('cart')
+            ->where('Id_Cart', $id_cart)
+            ->update(['Status' => 'selesai']);
+
+        return redirect()->route('kasir.accpesanan')
+                         ->with('success', 'Pesanan #' . $id_cart . ' telah berhasil diselesaikan.');
+    }
+
+
+    /**
      * Menampilkan halaman 'History Pesanan'
      */
     public function history()
     {
         $pesananSelesai = DB::table('cart')
-                            ->where('Status', 'selesai')
+                            ->whereRaw('LOWER(Status) = ?', ['selesai'])
                             ->orderBy('Id_Cart', 'desc')
                             ->get();
         return view('kasir.history', ['orders' => $pesananSelesai]);
@@ -134,18 +151,16 @@ class KasirController extends Controller
         }
 
         $items = DB::table('detail_cart')
-                    ->join('product', 'detail_cart.id_product', '=', 'product.Id_Product') 
-                    ->where('detail_cart.id_cart', $id_cart) 
-                    ->select('product.Nama_Product', 'detail_cart.jumlah', 'product.Harga')
-                    ->get();
+                ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product') 
+                ->where('detail_cart.Id_Cart', $id_cart) 
+                ->select('product.Nama_Product', 'detail_cart.Quantity as jumlah', 'product.Harga')
+                ->get();
 
         return view('kasir.detailhistory', [
             'order' => $order, 
             'items' => $items
         ]);
     }
-
-    // --- Method Tambahan Anda ---
     public function dashboard()
     {
         return redirect(route('kasir.accpesanan'));
