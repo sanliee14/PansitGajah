@@ -97,14 +97,14 @@ class KasirController extends Controller
             return redirect()->route('kasir.accpesanan')->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $items = DB::table('detail_cart') 
-                ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product') 
-                ->where('detail_cart.Id_Cart', $id_cart) 
-                ->select('product.Nama_Product', 'detail_cart.Quantity as jumlah', 'product.Harga') 
+        $items = DB::table('detail_cart')
+                ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product')
+                ->where('detail_cart.Id_Cart', $id_cart)
+                ->select('product.Nama_Product as nama', 'detail_cart.Quantity as jumlah', 'product.Harga as harga')
                 ->get();
 
         return view('kasir.prosespesanan', [
-            'order' => $order, 
+            'order' => $order,
             'items' => $items
         ]);
     }
@@ -119,12 +119,15 @@ class KasirController extends Controller
         if (!$order) {
             return back()->with('error', 'Pesanan tidak ditemukan.');
         }
-        DB::table('cart')
+       DB::table('cart')
             ->where('Id_Cart', $id_cart)
-            ->update(['Status' => 'selesai']);
+            ->update([
+                'Status' => 'selesai',
+                'updated_at' => now()
+            ]);
 
         return redirect()->route('kasir.accpesanan')
-                         ->with('success', 'Pesanan #' . $id_cart . ' telah berhasil diselesaikan.');
+            ->with('success', 'Pesanan #' . $id_cart . ' telah berhasil diselesaikan.');
     }
 
 
@@ -150,14 +153,14 @@ class KasirController extends Controller
             return redirect()->route('kasir.history')->with('error', 'History tidak ditemukan.');
         }
 
-        $items = DB::table('detail_cart')
-                ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product') 
-                ->where('detail_cart.Id_Cart', $id_cart) 
-                ->select('product.Nama_Product', 'detail_cart.Quantity as jumlah', 'product.Harga')
-                ->get();
+     $items = DB::table('detail_cart')
+            ->join('product', 'detail_cart.Id_Product', '=', 'product.Id_Product')
+            ->where('detail_cart.Id_Cart', $id_cart)
+            ->select('product.Nama_Product as nama', 'detail_cart.Quantity as jumlah', 'product.Harga as harga')
+            ->get();
 
         return view('kasir.detailhistory', [
-            'order' => $order, 
+            'order' => $order,
             'items' => $items
         ]);
     }
@@ -169,5 +172,48 @@ class KasirController extends Controller
     public function transaksi()
     {
         return view('kasir.transaksi');
+    }
+
+    /**
+     * Menampilkan form edit menu
+     */
+    public function editMenu($id)
+    {
+        $menu = DB::table('product')->where('Id_Product', $id)->first();
+
+        if (!$menu) {
+            return redirect()->route('kasir.menu')->with('error', 'Menu tidak ditemukan.');
+        }
+
+        return view('kasir.editMenu', ['menu' => $menu]);
+    }
+
+    /**
+     * Menyimpan perubahan menu (Update)
+     */
+    public function updateMenu(Request $request, $id)
+    {
+        $request->validate([
+            'nama_menu' => 'required|string|max:255',
+            'harga'     => 'required|numeric|min:0',
+        ]);
+
+        DB::table('product')
+            ->where('Id_Product', $id)
+            ->update([
+                'Nama_Product' => $request->nama_menu,
+                'Harga'        => $request->harga,
+            ]);
+
+        return redirect()->route('kasir.menu')->with('success', 'Menu berhasil diperbarui.');
+    }
+
+    /**
+     * Menghapus menu
+     */
+    public function deleteMenu($id)
+    {
+        DB::table('product')->where('Id_Product', $id)->delete();
+        return redirect()->route('kasir.menu')->with('success', 'Menu berhasil dihapus.');
     }
 }

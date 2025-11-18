@@ -18,12 +18,10 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <dt class="font-medium text-gray-500">Nama</dt>
-                    {{-- Asumsi kolom 'Nama' ada di tabel 'cart' --}}
-                    <dd class="text-lg font-semibold text-gray-900">{{ $order->Nama ?? 'Customer' }}</dd> 
+                    <dd class="text-lg font-semibold text-gray-900">{{ $order->nama ?? 'Customer' }}</dd> 
                 </div>
                 <div>
                     <dt class="font-medium text-gray-500">Nomor Meja</dt>
-                    {{-- Asumsi kolom 'No_Meja' ada di tabel 'cart' --}}
                     <dd class="text-lg font-semibold text-gray-900">{{ $order->No_Meja ?? 'N/A' }}</dd>
                 </div>
             </div>
@@ -38,10 +36,8 @@
                     <div class="ml-4 flex flex-1 flex-col">
                         <div>
                             <div class="flex justify-between text-base font-medium text-gray-900">
-                                {{-- PERBAIKAN: Sesuai dengan query controller 'product.Nama_Product' --}}
-                                <h3>{{ $item->Nama_Product }}</h3>
-                                {{-- PERBAIKAN: Sesuai dengan query controller 'product.Harga' --}}
-                                <p class="ml-4">Rp {{ number_format($item->Harga * $item->jumlah, 0, ',', '.') }}</p>
+                                <h3>{{ $item->nama }}</h3>
+                                <p class="ml-4">Rp {{ number_format($item->harga * $item->jumlah, 0, ',', '.') }}</p>
                             </div>
                         </div>
                         <p class="mt-1 text-sm text-gray-500">Jumlah: {{ $item->jumlah }}</p>

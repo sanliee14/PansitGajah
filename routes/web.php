@@ -52,6 +52,13 @@ Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.logi
 
 Route::middleware(['auth'])->group(function () {
     
+    // Route untuk Edit Menu
+Route::get('/kasir/menu/edit/{id}', [App\Http\Controllers\KasirController::class, 'editMenu'])->name('kasir.editMenu');
+Route::put('/kasir/menu/update/{id}', [App\Http\Controllers\KasirController::class, 'updateMenu'])->name('kasir.updateMenu');
+
+// Route untuk Hapus Menu
+Route::delete('/kasir/menu/delete/{id}', [App\Http\Controllers\KasirController::class, 'deleteMenu'])->name('kasir.deleteMenu');
+
     Route::get('/kasir', function () {
         return redirect()->route('kasir.accpesanan'); 
     })->name('kasir.dashboard');
@@ -71,6 +78,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/kasir/selesaikan/{id_cart}', [KasirController::class, 'selesaikanPesanan'])->name('kasir.selesaikan');
 
     Route::get('/kasir/history/{id_cart}', [KasirController::class, 'detailhistory'])->name('kasir.history.detail');
+
+    Route::get('/kasir/menu/edit/{id}', [App\Http\Controllers\KasirController::class, 'editMenu'])->name('kasir.editMenu');
+    Route::put('/kasir/menu/update/{id}', [App\Http\Controllers\KasirController::class, 'updateMenu'])->name('kasir.updateMenu');
+    Route::delete('/kasir/menu/delete/{id}', [App\Http\Controllers\KasirController::class, 'deleteMenu'])->name('kasir.deleteMenu');
 });
 
 

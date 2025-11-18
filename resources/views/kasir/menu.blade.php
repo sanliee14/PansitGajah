@@ -64,8 +64,8 @@
                         <td class="px-6 py-4">Rp {{ number_format($menu->Harga, 0, ',', '.') }}</td>
                         <td class="px-6 py-4">{{ $menu->Deskripsi }}</td>
                         <td class="px-6 py-4 flex space-x-2">
-                            <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                            <form action="#" method="POST" onsubmit="return confirm('Yakin ingin menghapus menu ini?');">
+                            <a href="{{ route('kasir.editMenu', $menu->Id_Product) }}" class="font-medium text-blue-600 hover:underline">Edit</a>
+                            <form action="{{ route('kasir.deleteMenu', $menu->Id_Product) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus menu ini?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="font-medium text-red-600 hover:underline">Hapus</button>
