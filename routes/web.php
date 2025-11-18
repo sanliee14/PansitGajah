@@ -92,3 +92,6 @@ Route::get('/owner/product', [OwnerController::class, 'product'])->name('owner.p
 Route::get('/owner/tambahproduct', [OwnerController::class, 'tambahproduct'])->name('owner.tambahproduct');
 Route::get('/owner/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
+Route::get('/owner/edit-produk/{id}', [OwnerController::class, 'editProduk'])->name('owner.edit');
+Route::delete('/owner/delete-produk/{id}', [OwnerController::class, 'deleteProduk'])->name('owner.delete');
+Route::put('/owner/update-produk/{id}', [OwnerController::class, 'updateProduk'])->name('owner.update');
