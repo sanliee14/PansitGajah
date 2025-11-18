@@ -22,16 +22,9 @@
         <h1 class="text-3xl font-extrabold tracking-wide uppercase mt-4 bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text drop-shadow-sm">
         Mie Pansit Gajah Siantar
         </h1>
-        <!-- <p class="mt-2 text-gray-600 italic text-sm">Rasa legendaris dari Siantar, kini hadir untukmu!</p> -->
     </div>
 
-        <!-- Gambar Produk -->
-        <!-- <div class="w-full mb-8">
-            <img src="{{ asset('image/5.jpeg') }}" alt="Mie Pansit" 
-                class="w-full rounded-3xl shadow-2xl object-cover   hover:shadow-blue-500/30">
-        </div> -->
-
-        <!-- Tombol ORDER -->
+        <!-- Tombol ORDER  -->
         <a href="{{ url('/customer/data') }}" 
             class="inline-block bg-blue-500 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-blue-400/60 hover:from-blue-500 hover:to-blue-300 transform hover:-translate-y-1 transition-all duration-300">
             PESAN SEKARANG 🍜

@@ -32,11 +32,28 @@
         <!-- Form Upload Bukti -->
         <div class="bg-blue-200/80 rounded-2xl p-5 w-full max-w-sm shadow-lg">
             <h3 class="font-bold text-gray-800 mb-2">Upload Bukti Pembayaran</h3>
-
+            
             <form action="{{ route('customer.proses') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                <!-- @csrf -->
-                <!-- <input type="file" name="bukti" accept="image/*" required -->
-                class="w-full p-2 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                @csrf
+                
+                @if ($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm" role="alert">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                
+                @if (Session::has('error'))
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm" role="alert">
+                        <p>{{ Session::get('error') }}</p>
+                    </div>
+                @endif
+
+                <input type="file" name="bukti_pembayaran" accept="image/*" required 
+                       class="w-full p-2 bg-white rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
                 
                 <button type="submit"
                         class="w-full bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2 rounded-full transition">

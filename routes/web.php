@@ -5,51 +5,80 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\OwnerController;
 
+
 Route::get('/', function () {
     return view('customer.home');
 });
 
-Route::get('/kasir/login', function () {
-    return view('kasir.login');
-})->name('kasir.loginForm');
+Route::get('/cust/home', [CustomerController::class, 'dashboard'])->name('cust.home');
+Route::get('/customer/data', [CustomerController::class, 'data'])->name('customer.data');
 
+// Route untuk menyimpan Nama & No Meja
+Route::post('/customer/data/store', [CustomerController::class, 'storeData'])->name('customer.data.store');
+
+Route::get('/customer/order', [CustomerController::class, 'order'])->name('customer.order');
+Route::get('/customer/fav', [CustomerController::class, 'fav'])->name('customer.fav');
+Route::get('/customer/makanan', [CustomerController::class, 'makanan'])->name('customer.makanan');
+Route::get('/customer/minuman', [CustomerController::class, 'minuman'])->name('customer.minuman');
+
+// Route untuk tombol "Pesan"
+Route::post('/customer/cart/add/{id}', [CustomerController::class, 'addToCart'])->name('customer.cart.add');
+Route::post('/customer/cart/increase/{id}', [CustomerController::class, 'increaseCart'])->name('customer.cart.increase');
+Route::post('/customer/cart/decrease/{id}', [CustomerController::class, 'decreaseCart'])->name('customer.cart.decrease');
+Route::post('/customer/cart/remove/{id}', [CustomerController::class, 'removeCart'])->name('customer.cart.remove');
+
+
+Route::get('/customer/checkout', [CustomerController::class, 'checkout'])->name('customer.checkout');
+Route::get('/customer/qris', [CustomerController::class, 'qris'])->name('customer.qris');
+
+Route::post('/customer/proses', [CustomerController::class, 'proses'])->name('customer.proses');
+
+
+// Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     });
 });
 
-Route::middleware(['auth', 'role:kasir'])->group(function () {
+// --- Route Kasir ---
+
+// Route Login (Publik)
+Route::get('/kasir/login', function () {
+    return view('kasir.login');
+})->name('kasir.loginForm');
+
+Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
+
+Route::middleware(['auth'])->group(function () {
+    
     Route::get('/kasir', function () {
-        return view('kasir.dashboard');
-    });
+        return redirect()->route('kasir.accpesanan'); 
+    })->name('kasir.dashboard');
+
+    Route::post('/kasir/logout', [KasirController::class, 'logout'])->name('kasir.logout');
+
+    Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
+    Route::post('/kasir/menu/store', [KasirController::class, 'storeMenu'])->name('kasir.menu.store');
+    
+    Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
+    Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
+    
+    // Route untuk MENAMPILKAN halaman proses
+    Route::get('/kasir/proses/{id_cart}', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
+    
+    // Route untuk MEMPROSES tombol "Selesaikan Pesanan"
+    Route::put('/kasir/selesaikan/{id_cart}', [KasirController::class, 'selesaikanPesanan'])->name('kasir.selesaikan');
+
+    Route::get('/kasir/history/{id_cart}', [KasirController::class, 'detailhistory'])->name('kasir.history.detail');
 });
 
-// Customer
-Route::get('/cust/home', [CustomerController::class, 'dashboard'])->name('cust.home');
-Route::get('/customer/data', [CustomerController::class, 'data'])->name('customer.data');
-Route::get('/customer/order', [CustomerController::class, 'order'])->name('customer.order');
-Route::get('/customer/fav', [CustomerController::class, 'fav'])->name('customer.fav');
-Route::get('/customer/makanan', [CustomerController::class, 'makanan'])->name('customer.makanan');
-Route::get('/customer/minuman', [CustomerController::class, 'minuman'])->name('customer.minuman');
-Route::get('/customer/checkout', [CustomerController::class, 'checkout'])->name('customer.checkout');
-Route::get('/customer/qris', [CustomerController::class, 'qris'])->name('customer.qris');
-Route::POST('/customer/proses', [CustomerController::class, 'proses'])->name('customer.proses');
 
-
-// Kasir
-Route::post('/kasir/login', [KasirController::class, 'login'])->name('kasir.login');
-Route::get('/kasir/menu', [KasirController::class, 'menu'])->name('kasir.menu');
-Route::get('/kasir/accpesanan', [KasirController::class, 'accpesanan'])->name('kasir.accpesanan');
-Route::get('/kasir/prosespesanan', [KasirController::class, 'prosespesanan'])->name('kasir.prosespesanan');
-Route::get('/kasir/history', [KasirController::class, 'history'])->name('kasir.history');
-
-//owner
+// --- Rute Owner ---
 Route::get('/owner/dashboard', [OwnerController::class, 'dashboard'])->name('owner.dashboard');
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
-Route::get('/owner/produk', [OwnerController::class, 'produk'])->name('owner.produk');
-Route::get('/owner/tambah-produk', [OwnerController::class, 'createProduk'])->name('owner.tambahProduk');
-Route::post('/owner/tambah-produk', [OwnerController::class, 'storeProduk'])->name('owner.storeProduk');
+Route::get('/owner/product', [OwnerController::class, 'product'])->name('owner.product');
+Route::get('/owner/tambahproduct', [OwnerController::class, 'tambahproduct'])->name('owner.tambahproduct');
 Route::get('/owner/transaksi', [OwnerController::class, 'transaksi'])->name('owner.transaksi');
 Route::get('/owner/laporan', [OwnerController::class, 'laporan'])->name('owner.laporan');
 Route::get('/owner/edit-produk/{id}', [OwnerController::class, 'editProduk'])->name('owner.edit');

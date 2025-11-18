@@ -30,9 +30,9 @@
       <ul class="space-y-4">
         <li><a href="{{ url('/owner/dashboard') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Dashboard</a></li>
         <li><a href="{{ url('/owner/transaksi') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Data Transaksi</a></li>
-        <li><a href="{{ url('/owner/produk') }}" class="block bg-blue-500 py-2 px-3 rounded-full font-semibold text-center shadow hover:bg-blue-600 transition"> Produk & Harga</a></li>
+        <li><a href="{{ url('/owner/product') }}" class="block bg-blue-500 py-2 px-3 rounded-full font-semibold text-center shadow hover:bg-blue-600 transition"> Product & Harga</a></li>
         <li><a href="{{ url('/owner/laporan') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Laporan Harian</a></li>
-        <li><a href="{{ url('/owner/tambah-produk') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Tambah Produk</a></li>
+        <li><a href="{{ url('/owner/tambahproduct') }}" class="block py-2 px-3 rounded-full hover:bg-blue-300 hover:text-blue-900 transition"> Tambah Produk</a></li>
       </ul>
     </aside>
 
@@ -50,6 +50,13 @@
                  class="w-full h-36 object-cover rounded-xl mb-3">
             <h2 class="font-semibold text-gray-800 text-base">{{ $item->Nama_Product }}</h2>
             <p class="text-blue-600 text-sm mb-3">Rp{{ number_format($item->Harga, 0, ',', '.') }}</p>
+      <!-- Tombol Tambah -->
+      <div class="mb-6 flex justify-end">
+        <a href="{{ url('/owner/tambahproduct') }}" 
+          class="bg-blue-500 text-white px-5 py-2 rounded-full shadow-md hover:bg-blue-400 transition font-semibold">
+          Tambah Produk
+        </a>
+      </div>
 
             <div class="flex justify-center gap-2">
               <a href="{{ url('/owner/edit-produk/'.$item->Id_Product) }}"
